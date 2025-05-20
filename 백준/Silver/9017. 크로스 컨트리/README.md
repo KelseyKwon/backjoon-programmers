@@ -95,3 +95,7 @@
 
  <p>출력은 표준출력을 사용한다. 하나의 테스트 케이스에 대한 우승팀의 번호를 한 줄에 출력한다. </p>
 
+### 해설
+
+#include <climits> -> INT_MAX을 사용하면 int 범위 내에서 가장 큰 정수 값을 지정할 수 있다. 
+unordered_map<int, vector<int>>을 순회하는 방법 : for (auto& kv : score_map) { --> kv가 마치 하나의 pair처럼 작동함. 
