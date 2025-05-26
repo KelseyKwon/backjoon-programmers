@@ -1,3 +1,4 @@
+*/
 #include <string>
 #include <vector>
 
@@ -42,7 +43,7 @@ vector<int> solution(string s) {
 
     return answer;
 }
-    */
+*/
 
     #include <string>
     #include <vector>
