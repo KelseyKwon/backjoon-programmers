@@ -1,0 +1,7 @@
+-- 코드를 입력하세요
+-- 보호 시작일보다 입양일이 더 바른 동물의 아이디와 이름 조회 -> ANIMAL_INs의 DATETIME보다 ANIMAL_OUTS의 DATETIME이 더 작으면 문제!
+SELECT a.ANIMAL_ID, a.NAME
+FROM ANIMAL_INS AS a
+JOIN ANIMAL_OUTS AS b ON a.ANIMAL_ID = b.ANIMAL_ID
+WHERE a.DATETIME > b.DATETIME
+ORDER BY a.DATETIME;
