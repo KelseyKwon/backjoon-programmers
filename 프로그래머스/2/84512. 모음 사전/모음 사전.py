@@ -1,22 +1,21 @@
-alphabet = ['A', 'E', 'I', 'O', 'U']
 count = 0
 answer = 0
+characters = ['A', 'E', 'I', 'O', 'U']
 
-def dfs(word, current):
+def dfs(word, next):
     global count, answer
-    if current == word:
+    if word == next:
         answer = count
         return
-    if len(current) >= 5:
+    
+    if len(next) >= 5:
         return
-
-    for char in alphabet:
+    
+    for char in characters:
         count += 1
-        dfs(word, current + char)
+        dfs(word, next + char)
 
 def solution(word):
     global count, answer
-    count = 0
-    answer = 0
     dfs(word, "")
     return answer
