@@ -1,11 +1,16 @@
 def solution(s):
-    answer = 0
     stack = []
-    for ch in s:
-        if (stack and stack[-1] == ch):
-            stack.pop()
+
+    cur_char = s[0]
+    stack.append(cur_char)
+
+    for i in range(1, len(s)):
+        if stack and stack[-1] == s[i]:
+            stack.pop(-1)
         else:
-            stack.append(ch)
+            stack.append(s[i])
+    
     if (len(stack) == 0):
-        answer = 1
-    return answer
+        return 1
+    else:
+        return 0
