@@ -1,15 +1,15 @@
 -- 코드를 입력하세요
--- GENdER : 0 or 1
--- SALES_DATE, PRODUCT_ID, USER_ID 별로는 판매 데이터가 하나만 존재
--- 년, 월, 성별 별로 상품을 구매한 회원수
--- YEAR, MONTH, GENDER 을 기준으로 오름차순
-SELECT 
-    YEAR(a.SALES_DATE) AS YEAR, 
-    MONTH(a.SALES_DATE) AS MONTH, 
-    n.GENDER, 
-    COUNT(DISTINCT a.USER_ID) AS USERS
-FROM ONLINE_SALE a
-JOIN USER_INFO n ON a.USER_ID = n.USER_ID
-where n.GENDER in (0, 1)
-GROUP BY YEAR(a.SALES_DATE), MONTH(a.SALES_DATE), n.GENDER
-ORDER BY YEAR(a.SALES_DATE), MONTH(a.SALES_DATE), n.GENDER;
+-- GENDER는 0 or 1 or NULL
+-- SALES_DATE, USER_ID, PRODUCT_ID 조합에 대해서는 판매 데이터가 하나만
+-- SALES_DATE 년, 월, 성별을 기준을로 오름차순
+-- GENdER가 NULL이면 제외하기
+with yes_gender as (
+select *
+from USER_INFO
+where GENDER is NOT NULL
+)
+select YEAR(SALES_DATE) as YEAR, MONTH(SALES_DATE) as MONTH, a.GENDER, count(DISTINCT a.USER_ID) as USERS
+from ONLINE_SALE b
+join yes_gender a on a.USER_ID = b.USER_ID
+group by YEAR(SALES_DATE), MONTH(SALES_DATE), a.GENDER
+order by YEAR(SALES_DATE) asc, MONTH(SALES_DATE) asc, GENDER asc
