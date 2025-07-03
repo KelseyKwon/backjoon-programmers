@@ -38,3 +38,6 @@ def solution(s):
         best = min(best, len(compressed))
 
     return best
+
+
+
