@@ -1,27 +1,27 @@
+import sys
+
 def solution(n, wires):
-    def dfs(start, visited, graph):
-        visited[start] = True
+    def dfs(visited, graph, node):
+        visited[node] = True
         count = 1
-        for k in graph[start]:
-            if not visited[k]:
-                count += dfs(k, visited, graph)
+        for i in graph[node]:
+            if not visited[i]:
+                count += dfs(visited, graph, i)
         return count
-
-    min_diff = float('inf')
-
-    for i in range(len(wires)):
-        linked_list = [[]  for _ in range(n+1)]
-        for j in range(len(wires)):
-            if (i == j):
+            
+    min_diff = sys.maxsize
+    # visited = [False] * n
+    for i in range(1, (len(wires)+1)):
+        visited = [False for _ in range(n+1)]
+        graph = [[] for _ in range(n+1)]
+        for j in range(1, (len(wires)+1)):
+            if ( i == j ):
                 continue
             else:
-                a, b = wires[j]
-                linked_list[a].append(b)
-                linked_list[b].append(a)
-        visited = [False] * (n+1)
-        count = dfs(1, visited, linked_list)
-
-        other = n - count
-        min_diff = min(min_diff, abs(count - other))
-
+                # wires[j] : [1, 3] 과 같은것.
+                graph[wires[j-1][0]].append(wires[j-1][1])
+                graph[wires[j-1][1]].append(wires[j-1][0])
+        count = dfs(visited, graph, 1)
+        other_count = n - count
+        min_diff = min(min_diff, abs(count - other_count))
     return min_diff
