@@ -1,33 +1,30 @@
+import math
 def solution(n, words):
-    set_words = set()
-    set_words.add(words[0])
-
+    answer = []
+    """
+    2<= n <= 10
+    n<= 배열의 길이 <= 100
+    2<= 단어의 길이 <= 50
+    [번호, 차례 형태로 return] 하기
+    
+    1) 이미 존재 하거나 -> set으로 만들고 전과 길이가 같으면 False하거나 ... 
+    2) 끝이 맞지 않으면 -> 이전[-1] == 지금[0]이 맞는지.
+    
+    차례 = (i // n) + 1, 순서 : (i % n) + 1
+    """
+    word_list = set()
+    word_list.add(words[0])
+    flag = words[0]
+    
     for i in range(1, len(words)):
-        # 이전 단어의 끝과 현재 단어의 첫 글자 비교 + 중복 확인
-        if words[i - 1][-1] != words[i][0] or words[i] in set_words:
-            person = (i % n) + 1
-            turn = (i // n) + 1
-            return [person, turn]
-        set_words.add(words[i])
-
+        if words[i] in word_list or flag[-1] != words[i][0]:
+                   return [(i % n) + 1, (i // n) + 1]
+                   break
+        else: 
+            word_list.add(words[i])
+            flag = words[i]
+    
     return [0, 0]
+                   
 
-"""
-def solution(n, words):
-    N = len(words)
-    a, b = 0, 0
-    set_words = set()
-    set_words.add(words[0])
-
-    for i in range(1, N):
-      if (words[i-1][-1] != words[i][0]) or (len(set_words) == len(set_words.add(words[i]))):
-        if (i % N == 0): a = N
-        else: a = i%N
-        b = (i-1)/n+1
-        break
-      else:
-        set_words.add(words[i])
-
-
-    return [a, b]
-"""
+    return answer
