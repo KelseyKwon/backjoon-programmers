@@ -1,55 +1,22 @@
-# 이진 변환 횟구와 제거하는 0의 개수를 answer에 담아 반환하기
+"""
+이진 변환 과정:
+1. 0 없애 -> 0count를 result[1]에 더해
+2. 길이 구해
+3. 길이를 이진으로 변환해
 
-# def search(str, answer):
-#     if len(str) == 1:
-#         return
-#     else: 
-#         answer[0] += str.count("0")
-#         str = str.replace("0", "")
-#         answer[1] += 1
-#         return search(str, answer)
+모든 단계 마다 result[0] += 1
 
-# def solution(s):
-#     answer = [0, 0]
-#     search(s, answer)
-#     return answer
-# def search(str, answer):
-#     if str == "1":
-#         return answer
-#     else: 
-#         answer[1] += str.count("0")
-#         str = str.replace("0", "")
-#         answer[0] += 1
-#         str = bin(len(str))[2:]
-#         return search(str, answer)
+그리고 1이면 나와
 
-# def solution(s):
-#     answer = [0, 0]
-#     return search(s, answer)
-
-# def dfs(s, transforms, zeros):
-#     if s == "1":
-#         return transforms, zeros
-    
-#     z = s.count("0")
-#     zeros += z
-#     s = s.replace("0", "")
-#     s = bin(len(s))[2:]
-#     return dfs(s, transforms+1, zeros)
-
-# def solution(s):
-#     t, z = dfs(s, 0, 0)
-#     return [t, z]
+"""
 
 def solution(s):
-    answer = [0, 0]  # [변환 횟수, 제거된 0의 개수]
-
+    answer = [0, 0]
     while s != '1':
-        zero_count = s.count('0')
-        s = s.replace('0', '')  # 0 제거
-        length = len(s)
-        s = bin(length)[2:]  # 길이를 2진수로 변환
+        answer[1] += s.count('0')
+        s = s.replace('0', '')
+        len_s = len(s)
+        s = bin(len_s)[2:]
         answer[0] += 1
-        answer[1] += zero_count
-
+    
     return answer
