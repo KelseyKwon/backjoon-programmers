@@ -1,25 +1,29 @@
+"""
+1. list로 만들기
+2. 순열로 모든 가능한 경우의 수 만들기
+3. 2 이상인지 체크, 그리고 소수인지 체크
+4. set에 담고 set의 길이를 반환.
+"""
 import itertools
-
-# 소수인지 아닌지 확인하는법
-def is_prime(num):
-    if num < 2:
-        return False
-    for i in range(2, num):
-        if num % i == 0:
-            return False
-    return True
-
 def solution(numbers):
-    # 숫자를 자릿수로 쪼개기
+    answer = set()
+    
+    def isPrime(num):
+        if num < 2:
+            return False
+        
+        for i in range(2, num):
+            if (num % i == 0):
+                return False
+        
+        return True
+    
     num_list = list(numbers)
-    primes = set()
-
-    #순열로 반복하기
-    for r in range(1, len(num_list) + 1):
-        for perm in itertools.permutations(num_list, r):
-            # perm은 배열, 안의 각 요소들을 순서대로 꺼내서 
-            # '' 구분자로 연결한다. 
-            num = int(''.join(perm))
-            if is_prime(num):
-                primes.add(num)
-    return len(primes)
+    
+    for i in range(1, len(numbers)+1):
+        for temp in itertools.permutations(num_list, i):
+            cur_num = int(''.join(temp))
+            print(cur_num)
+            if isPrime(cur_num):
+                answer.add(cur_num)
+    return len(answer)
