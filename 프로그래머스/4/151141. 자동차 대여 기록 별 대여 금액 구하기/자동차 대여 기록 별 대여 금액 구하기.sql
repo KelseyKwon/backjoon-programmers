@@ -48,7 +48,3 @@ select HISTORY_ID, FLOOR((100 - IFNULL(b.DISCOUNT_RATE, 0)) / 100 * a.DAILY_FEE 
 from rental as a
 left join CAR_RENTAL_COMPANY_DISCOUNT_PLAN as b on a.DURATION_TYPE = b.DURATION_TYPE and a.CAR_TYPE = b.CAR_TYPE
 order by FEE desc, a.HISTORY_ID desc
-
-
-
-
