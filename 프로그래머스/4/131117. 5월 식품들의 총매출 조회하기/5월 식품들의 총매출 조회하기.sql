@@ -1,9 +1,10 @@
 -- 코드를 입력하세요
--- 생산일자가 2022-05 
--- PRODUCT_ID, PRODUCT_NAME, TOTAL_SALES = PRICE * AMOUNT
+-- PRODUCT_DATE = '2022-05'
+-- PRODUCT_ID, a.PRODUCT_NAME, 총매출 = a.PRICE * b.AMOUNT
+-- 총매출을 기준으로 desc, PRODUCT_ID을 기준으로 asc
 SELECT a.PRODUCT_ID, a.PRODUCT_NAME, sum(a.PRICE * b.AMOUNT) as TOTAL_SALES
-from FOOD_PRODUCT as a join FOOD_ORDER as b
-on a.PRODUCT_ID = b.PRODUCT_ID
+FROM FOOD_PRODUCT a
+join FOOD_ORDER b on a.PRODUCT_ID = b.PRODUCT_ID
 where b.PRODUCE_DATE like '2022-05%'
 group by a.PRODUCT_ID, a.PRODUCT_NAME
-order by TOTAL_SALES desc, PRODUCT_ID asc
+order by TOTAL_SALES desc, a.PRODUCT_ID asc
