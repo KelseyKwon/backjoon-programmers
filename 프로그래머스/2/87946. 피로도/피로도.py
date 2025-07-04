@@ -1,20 +1,19 @@
-from itertools import permutations
-
-def search(list, k):
-    count = 0
-    for i in list:
-        if (k >= i[0]):
-            k -= i[1]
-            count += 1
-        else:
-            return count
-    return count
-
+import itertools
 
 def solution(k, dungeons):
-    answer = -1
-
-    for list in permutations(dungeons, len(dungeons)):
-        answer = max(answer, search(list, k))
-
+    def checked(k, dungeon):
+        cur_fatigue = k
+        count = 0
+        for stage in dungeon:
+            if cur_fatigue >= stage[0]:
+                cur_fatigue -= stage[1]
+                count += 1
+            else:
+                return count
+        return count
+    answer = 0
+    
+    for element in itertools.permutations(dungeons):
+        answer = max(answer, checked(k, element))
+    
     return answer
