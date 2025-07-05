@@ -1,26 +1,15 @@
 """
-start_index = 0
-until ; start_index + k까지
-
-그리고 선택하면 -> start_index가 선택한 index+1로 변환됨 (enumerate) -> k-=1
-
-그리고 start_index + k까지
+2개를 제거했을때 가장 큰 수 -> 그리디!
+1924에서 가장 작은 것을 빼면 됨. k개 만큼
 """
 
 def solution(number, k):
+    answer = ''
     stack = []
     
-    for num in number :
-        #스택의 꼭대기보다 비교 숫자가 크다면
-        while stack and k > 0 and stack[-1] < num: 
-            #스택의 맨 위 값을 제거하고 뽑는 개수 k도 -1
+    for s in range(len(number)):
+        while stack and k > 0 and stack[-1] < number[s]:
             stack.pop()
-            k -= 1
-        #현재 num 값은 무조건 스택에 추가
-        stack.append(num)
+            k-=1
+        stack.append(number[s])
     return "".join(stack[:len(number)-k])
-
-        
-        
-    
-    return answer
