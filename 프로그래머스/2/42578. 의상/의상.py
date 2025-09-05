@@ -1,7 +1,7 @@
 """
 "headgear" : "yellow_hat", "green_turban"
 "eyewear" : "blue_sunglasses"
-
+ㅇㅇ
 이러면 
 1 : 3가지
 2 : 2
