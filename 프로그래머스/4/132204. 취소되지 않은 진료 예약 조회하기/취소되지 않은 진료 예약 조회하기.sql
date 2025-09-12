@@ -1,14 +1,20 @@
 -- 코드를 입력하세요
--- APNT_YMD = '2022-04-13' and APNT_CNCL_YN = 'N'
--- c.APNT_NO, a.PT_NAME, a.PT_NO, c.MCDP_CD, b.DR_NAME, c.APNT_YMD
--- c.APNT_YMD asc
-with not_canceled as (
-    select *
-    from APPOINTMENT
-    where DATE(APNT_YMD) = '2022-04-13' and APNT_CNCL_YN = 'N'
-)
-select c.APNT_NO, a.PT_NAME, a.PT_NO, c.MCDP_CD, b.DR_NAMe, c.APNT_YMD
-from not_canceled c
-join PATIENT a on c.PT_NO = a.PT_NO
-join DOCTOR b on c.MDDR_ID = b.DR_ID
-order by c.APNT_YMD
+-- APNT_YMD = 2022.04.13이고, MCDP_CD = CS, 그리고 APTN_CNCL_YN = 'N'SQL문 작성
+-- APNT_NO(3), PT_NAME(1), PT_NO(1, 3), MCDP_CD(3), DR_NAME(2), APNT_YMD(3)
+-- ASC -> APNY_YMD를 기준으로
+SELECT
+  a.APNT_NO,
+  b.PT_NAME,
+  b.PT_NO,
+  a.MCDP_CD,
+  c.DR_NAME,
+  a.APNT_YMD
+FROM APPOINTMENT AS a
+JOIN PATIENT AS b
+  ON a.PT_NO = b.PT_NO
+JOIN DOCTOR AS c
+  ON a.MDDR_ID = c.DR_ID
+WHERE DATE(a.APNT_YMD) = '2022-04-13'
+  AND a.MCDP_CD = 'CS'
+  AND a.APNT_CNCL_YN = 'N'
+ORDER BY a.APNT_YMD ASC;
