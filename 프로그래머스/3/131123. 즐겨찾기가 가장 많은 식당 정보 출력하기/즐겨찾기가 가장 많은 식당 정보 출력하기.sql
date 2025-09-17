@@ -1,0 +1,9 @@
+-- 코드를 입력하세요
+-- GROUP BY FOOD_TYPE -> MAX(FAVORITES) 뽑기
+-- FOOD_TYPE, REST_ID, REST_NAME, MAX(FAVORITES) 뽑기
+-- desc FOOD_TYPE
+select FOOD_TYPE, REST_ID, REST_NAME, FAVORITES
+from REST_INFO
+where FAVORITES in (select max(FAVORITES) from REST_INFO group by FOOD_TYPE)
+group by FOOD_TYPE
+order by FOOD_TYPE desc
