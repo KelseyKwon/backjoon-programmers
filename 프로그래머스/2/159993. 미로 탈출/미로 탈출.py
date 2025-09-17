@@ -1,51 +1,55 @@
+"""
+s -> l가고 l -> e까지
+
+각각 모두 최단거리!!
+
+queue쓰기
+
+다음으로 이동하는 기준 : 범위 안에 있고, x가 아니며, 방문하지 않았으면
+"""
 from collections import deque
 
-def bfs(maps, start, target):
-  n, m = len(maps), len(maps[0])
-  visited = [[False]*m for _ in range(n)]
-  queue = deque()
-  queue.append((*start, 0))
-  visited[start[0]][start[1]] = True
-
-  dx = [0, 1, 0, -1]
-  dy = [1, 0, -1, 0]
-
-  while queue:
-    x, y, dist = queue.popleft()
-
-    if maps[x][y] == target:
-      return dist
-    for i in range(4):
-      nx = x + dx[i]
-      ny = y + dy[i]
-
-      if (0<=nx<n and 0<=ny<m):
-        if not visited[nx][ny] and maps[nx][ny] != 'X':
-          visited[nx][ny] = True
-          queue.append((nx, ny, dist+1))
-
-  return -1
-
-  """
-queue에 원소가 있을때까지 : popleft하고, 종료조건이면 리턴하고,
-그리고 range(4)동안, nx, ny계산하고, 제약조건을 확인하고, 다 만족하면 visited, queue에 추가하기.
-  """
-
-
-
 def solution(maps):
-    answer = 0
-    for row in range(len(maps)):
-      for col in range(len(maps[0])):
-        if (maps[row][col] == 'S'):
-          start= (row, col)
-        elif (maps[row][col] == 'L'):
-          lever = (row, col)
+    n, m = len(maps), len(maps[0])
+    dx = [0, 1, 0, -1]
+    dy = [1, 0, -1, 0]
     
-    to_lever = bfs(maps, start, 'L')
-    to_exit = bfs(maps, lever, 'E')
-
-    if to_lever == -1 or to_exit == -1:
-      return -1
-
+    def inRange(x, y):
+        return 0<=x<n and 0<=y<m
+    
+    def bfs(cur_x, cur_y, target):
+        visited = [[False]  * m for _ in range(n)]
+        q = deque()
+        q.append((cur_x, cur_y, 0))
+        visited[cur_x][cur_y] = True
+        
+        while q:
+            x, y, count = q.popleft()
+            if (maps[x][y] == target):
+                return count
+            for i in range(4):
+                nx = x + dx[i]
+                ny = y + dy[i]
+                
+                if (inRange(nx, ny) and maps[nx][ny] != 'X' and not visited[nx][ny]):
+                    q.append((nx, ny, count + 1))
+                    visited[nx][ny] = True
+                    
+        return -1
+                    
+    
+    # maps가 지금 문자열이다.
+    for i in range(n):
+        for j in range(m):
+            if maps[i][j] == 'S':
+                start_x , start_y = i, j
+            elif maps[i][j] == 'L':
+                lever_x, lever_y = i, j
+            
+    
+    to_lever = bfs(start_x, start_y, 'L')
+    if to_lever == -1: return -1
+    to_exit = bfs(lever_x, lever_y, 'E')
+    if to_exit == -1: return -1
+    
     return to_lever + to_exit
