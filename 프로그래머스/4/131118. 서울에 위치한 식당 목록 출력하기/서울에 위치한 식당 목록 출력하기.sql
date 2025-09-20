@@ -1,14 +1,19 @@
 -- 코드를 입력하세요
--- ADDRESS = '서울' 
--- REST_ID, a.REST_NAME, a.FOOD_TYPE, a.FAVORITES, a.ADDRESS, 
--- group by REST_ID -> sum(REVIEW_SCORE) / count(*)
-with in_seoul as (
-select *
-from REST_INFO
-where ADDRESS like '서울%'
-)
-select a.REST_ID, a.REST_NAME, a.FOOD_TYPE, a.FAVORITES, a.ADDRESS, round(sum(b.REVIEW_SCORE) / count(DISTINCT b.REVIEW_ID), 2) as AVG_SCORE
-from in_seoul a
-join REST_REVIEW b on a.REST_ID = b.REST_ID
-group by a.REST_ID, a.REST_NAME, a.FOOD_TYPE, a.FAVORITES, a.ADDRESS
-order by AVG_SCORE desc, a.FAVORITES desc
+-- ADDRESS = "서울" a.REST_ID, a.REST_NAME, a.FOOD_TYPE, a.FAVORITES, a.ADDRESS, REVIEW_SCORE의 평균 -> 3번쨰 자리에서 반올림.
+-- 평균점수 desc, FAVORITES desc
+SELECT
+  a.REST_ID,
+  a.REST_NAME,
+  a.FOOD_TYPE,
+  a.FAVORITES,
+  a.ADDRESS,
+  ROUND(AVG(b.REVIEW_SCORE), 2) AS SCORE
+FROM REST_INFO AS a
+JOIN REST_REVIEW AS b
+  ON a.REST_ID = b.REST_ID
+WHERE a.ADDRESS LIKE '서울%'              -- '서울'로 시작(정확한 지역 필터)
+GROUP BY
+  a.REST_ID, a.REST_NAME, a.FOOD_TYPE, a.FAVORITES, a.ADDRESS
+ORDER BY
+  SCORE DESC,
+  a.FAVORITES DESC;
