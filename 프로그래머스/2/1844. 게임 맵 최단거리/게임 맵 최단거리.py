@@ -1,36 +1,38 @@
 """
-1 : 갈 수 있는 길
-0 : 갈 수 없는 길
+최단 거리 -> bfs!!
+
+0이 갈 수 없는거, 1이 갈 수 있는거. 
+queue에 거리를 담아.
 
 
-bfs -> 상, 하, 좌, 우 확인해서 1이고, 범위 안에 있고, 방문하지 않았으면 -> go
 """
 from collections import deque
 
 def solution(maps):
-    N, M = len(maps), len(maps[0])
+    answer = 0
     dx = [0, 1, 0, -1]
     dy = [1, 0, -1, 0]
-    visited = [[False] * M for _ in range(N)]
-    
+    n = len(maps)
+    m = len(maps[0])
     def inRange(x, y):
-        return 0 <= x < N and 0 <= y < M
+        return 0<=x<n and 0<=y<m
     
-    def bfs(start_x, start_y):
-        if maps[start_x][start_y] == 0:
-            return -1
-        queue = deque([(start_x, start_y, 1)])   #튜플 하나를 원소로
-        visited[start_x][start_y] = True
-        
-        while queue:
-            x, y, cost = queue.popleft()
-            if x == N - 1 and y == M - 1:
+    def bfs(x, y):
+        visited = [[False]*m for _ in range(n)] 
+        q = deque([(x, y, 1)])
+        visited[x][y] = True
+        while q:
+            cur_x, cur_y, cost = q.popleft()
+            
+            if (cur_x == n-1 and cur_y == m-1):
                 return cost
             for i in range(4):
-                nx, ny = x + dx[i], y + dy[i]
-                if inRange(nx, ny) and maps[nx][ny] == 1 and not visited[nx][ny]:
-                    visited[nx][ny] = True
-                    queue.append((nx, ny, cost + 1))  #튜플로 넣기
+                nx = cur_x + dx[i]
+                ny = cur_y + dy[i]
+                
+                if (inRange(nx, ny) and not visited[nx][ny] and maps[nx][ny] != 0):
+                    q.append((nx, ny, cost + 1))
+                    visited[nx][ny] = True  
         return -1
-
+        
     return bfs(0, 0)
