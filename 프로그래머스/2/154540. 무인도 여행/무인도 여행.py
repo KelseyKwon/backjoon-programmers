@@ -1,46 +1,52 @@
 """
-x : 바다, 1~9는 무인도를 나타냄.
-상, 하, 좌, 우로 연결되면 하나의 무인도
-
-5 -> 9 -> 1 -> 5 -> 1 -> 3 -> 2 -> 1 -> 1로 가 근데 이미 방문 (안방문)
-
-dfs!
-
-모든 배열의 값에 대해서, X가 아니고, 숫자이면, dfs수행
-dfs내부에서는:
-if 숫자이고, x가 아니면 -> 계속 글로 가면서 해당 값의 숫자를 더해.
-그리고 visited 처리해
+1. 일단 maps를 1 -> 2차원 배열로
+2. bfs : 상, 하, 좌, 우를 탐색하고 -> queue.append(해당 칸의 좌표, 먹이량) 더해.
+3. 그리고 다 했으면 -> answer.append()
 """
-
 from collections import deque
 
 def solution(maps):
-    N, M = len(maps), len(maps[0])
-    grid = [list(row) for row in maps]           # 문자 격자
-    visited = [[False] * M for _ in range(N)]
-    dx, dy = [-1, 1, 0, 0], [0, 0, -1, 1]
     answer = []
+    n = len(maps)
+    m = len(maps[0])
+    
+    # #maps[0]의 length만큼, 각 maps
+    # map = [[maps[i][j] for j in range(m)] for i in range(n)]
+    # print(map)
+    visited = [[False] * m for _ in range(n)]
+    dx = [0, 1, 0, -1]
+    dy = [1, 0, -1, 0]
     
     def inRange(x, y):
-        return 0 <= x < N and 0 <= y < M
+        return 0<=x<n and 0<=y<m
     
-    def bfs(sx, sy):
-        visited[sx][sy] = True
-        q = deque([(sx, sy)])
-        days = int(grid[sx][sy])
+    def bfs(x, y):
+        q = deque([(x, y)])
+        visited[x][y] = True
+        total = int(maps[x][y])
+        
         while q:
-            x, y = q.popleft()
-            for k in range(4):
-                nx, ny = x + dx[k], y + dy[k]
-                if inRange(nx, ny) and not visited[nx][ny] and grid[nx][ny] != 'X':
-                    visited[nx][ny] = True
-                    days += int(grid[nx][ny])
+            cur_x, cur_y= q.popleft()
+            
+            for i in range(4):
+                nx = cur_x + dx[i]
+                ny = cur_y + dy[i]
+                
+                if inRange(nx, ny) and not visited[nx][ny] and maps[nx][ny] != 'X':
                     q.append((nx, ny))
-        return days
+                    visited[nx][ny] = True
+                    total += int(maps[nx][ny])
+        return total
+            
     
-    for i in range(N):
-        for j in range(M):
-            if not visited[i][j] and grid[i][j] != 'X':
+    for i in range(n):
+        for j in range(m):
+            if not visited[i][j] and maps[i][j] != 'X':
                 answer.append(bfs(i, j))
     
-    return sorted(answer) if answer else [-1]
+    # if (len(answer) == 0):
+    if not answer:
+        # answer.append[-1]
+        return [-1]
+    answer.sort()
+    return answer
