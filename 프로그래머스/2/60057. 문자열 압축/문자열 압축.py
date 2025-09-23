@@ -1,43 +1,38 @@
+"""
+1은 생략 -> 나타난 횟수에 대해서 2a2b이런식으로
+
+for 끊는단위 (1 ~ s/2)
+stack으로!
+a
+"""
 import sys
-input = sys.stdin.readline
-
-def compress(s, size):
-    # size 단위로 자른 뒤 압축 결과 문자열 반환
-    chunks = [s[i:i+size] for i in range(0, len(s), size)]
-    prev = chunks[0]
-    count = 1
-    result = []
-
-    for cur in chunks[1:]:
-        if cur == prev:
-            count += 1
-        else:
-            # 그룹 끝났을 때
-            if count > 1:
-                result.append(str(count))
-            result.append(prev)
-            prev = cur
-            count = 1
-
-    # 마지막 그룹
-    if count > 1:
-        result.append(str(count))
-    result.append(prev)
-
-    return ''.join(result)
 
 def solution(s):
-    # s 길이가 1이면 바로 1
-    if len(s) == 1:
-        return 1
-
-    best = len(s)  # 아무 압축도 안 했을 때 원본 길이
-    # 1 ~ len(s)//2 까지 모든 단위 시도
-    for size in range(1, len(s)//2 + 1):
-        compressed = compress(s, size)
-        best = min(best, len(compressed))
-
-    return best
-
-
-
+    n = len(s)
+    answer = n # 최악은 그대로의 길이 
+    
+    def dozip(start, length, s):
+        cur_str = []
+        prev = start
+        count = 1
+        for i in range(length, len(s), length):
+            temp = s[i:i+length]
+            if (prev == temp):
+                count += 1
+            else:
+                # if (count == 1):
+                #     cur_str.append(prev)
+                # else:
+                #     cur_str.append(count + prev)
+                cur_str.append((str(count) if count > 1 else "") + prev)
+                count = 1
+                prev = temp
+        cur_str.append((str(count) if count > 1 else "") + prev)
+        result_answer = len("".join(cur_str)) #문자로 이루어진 배열을 합치기
+        return result_answer
+            
+    
+    for i in range(1, n // 2 + 1): 
+        answer = min(answer, dozip(s[:i], i, s))
+    
+    return answer
