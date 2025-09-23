@@ -1,0 +1,9 @@
+# Write your MySQL query statement below
+# at leat three times consecutively
+
+select distinct l1.num as ConsecutiveNums
+from Logs l1
+join Logs l2
+on l2.id = l1.id + 1 and l2.num = l1.num
+join Logs l3
+on l3.id = l2.id + 1 and l3.num = l2.num;
