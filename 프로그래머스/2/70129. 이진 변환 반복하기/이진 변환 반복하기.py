@@ -1,22 +1,22 @@
 """
-이진 변환 과정:
-1. 0 없애 -> 0count를 result[1]에 더해
-2. 길이 구해
-3. 길이를 이진으로 변환해
+x에서 0을 모두 제거해 -> 1111 그리고 그 다음 len을 이진 변환 함수로 넘겨서 이진으로 변환된 수를 내놔.
 
-모든 단계 마다 result[0] += 1
-
-그리고 1이면 나와
-
+4 ->while 현재 != 0일때까지, 나머지를 그 앞에 추가해.
 """
 
 def solution(s):
     answer = [0, 0]
-    while s != '1':
-        answer[1] += s.count('0')
-        s = s.replace('0', '')
-        len_s = len(s)
-        s = bin(len_s)[2:]
+    def to_binary(num):
+        result = ""
+        while (num != 0):
+            result = str(num % 2) + result
+            num = num // 2
+        return result
+    
+    while (s != "1"):
+        answer[1] += s.count("0")
+        s = s.replace("0", "")
+        s = to_binary(len(s))
         answer[0] += 1
     
     return answer
