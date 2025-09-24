@@ -1,12 +1,10 @@
--- 코드를 입력하세요
--- Milk & Yogurt가 모두 있는 장바구니 알아보기
--- 
-(SELECT CART_ID
-from CART_PRODUCTS
-where NAME = 'Yogurt')
-intersect
-(
-select CART_ID
-    from CART_PRODUCTS
-    where NAME = 'Milk'
-)
+SELECT CART_ID
+FROM (
+    SELECT CART_ID,
+           GROUP_CONCAT(DISTINCT NAME) AS names
+    FROM CART_PRODUCTS
+    GROUP BY CART_ID
+) t
+WHERE names LIKE '%Milk%'
+  AND names LIKE '%Yogurt%'
+ORDER BY CART_ID;
