@@ -1,29 +1,34 @@
 """
-1. list로 만들기
-2. 순열로 모든 가능한 경우의 수 만들기
-3. 2 이상인지 체크, 그리고 소수인지 체크
-4. set에 담고 set의 길이를 반환.
+일단 1개 만드는 상황 -> len(numbers)까지 만드는 상황
+
+for i in range(len)
+if 소수 : answer += 1
+
 """
-import itertools
+from itertools import permutations
+import math
+
 def solution(numbers):
-    answer = set()
-    
-    def isPrime(num):
-        if num < 2:
+    answer = 0
+    nums = set()
+    # 소수 인지 확인하는법
+    def isPrime(n):
+        if n < 2:
             return False
-        
-        for i in range(2, num):
-            if (num % i == 0):
+        # 약수는 항상 n^1/2 이하에서 발견된다. 
+        for i in range(2, int(math.sqrt(n)) + 1):
+            if n % i == 0:
                 return False
-        
         return True
     
-    num_list = list(numbers)
+    # permutations는 iterable 객체에서 r개를 뽑아 모든 순열을 생성한다.
+    for i in range(1, len(numbers) + 1):
+        # numbers도 일종의 배열이다.
+        for p in permutations(numbers, i):
+            temp = int("".join(p))
+            if temp not in nums:
+                nums.add(temp)
+                if isPrime(temp):
+                    answer += 1
     
-    for i in range(1, len(numbers)+1):
-        for temp in itertools.permutations(num_list, i):
-            cur_num = int(''.join(temp))
-            print(cur_num)
-            if isPrime(cur_num):
-                answer.add(cur_num)
-    return len(answer)
+    return answer
