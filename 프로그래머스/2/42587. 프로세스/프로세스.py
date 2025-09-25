@@ -1,17 +1,33 @@
+"""
+queue.popleft() -> 만약 큐에 우선순위가 더 높은 프로세스가 있으면 -> 다시 큐에 넣기.
+아니면 -> 실행. 
+
+인덱스 : 2
+0 : 2
+1 : 1
+2 : 3
+3 : 2
+
+
+"""
 from collections import deque
+from collections import defaultdict
 
 def solution(priorities, location):
-    count = 0
-    q = deque()
-    for index, v in enumerate(priorities):
-        q.append((v, index)) # (2, 0), (1, 1) , (3, 2) 이렇게
-        print(q)
+    answer = 0
+    info = defaultdict(int)
     
+    q = deque([i for i in range(len(priorities))]) #[0, 1, 2, 3]
+    for index, value in enumerate(priorities):
+        info[index] = value # 0 : 2, 1 : 1, 
     while q:
-        cur_priority , index = q.popleft()
-        if any(k[0] > cur_priority for k in q):
-            q.append((cur_priority, index))
+        cur_index = q.popleft()
+        
+        for k in q:
+            if info[k] > info[cur_index]:
+                q.append(cur_index)
+                break
         else:
-            count += 1
-            if index == location:
-                return count
+            answer += 1
+            if (cur_index == location):
+                return answer
