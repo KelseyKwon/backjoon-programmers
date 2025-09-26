@@ -1,26 +1,23 @@
 """
-중복 방지 -> set!
-set에 좌표를 담아 -> (시작, 끝) / (끝, 시작) 으로 
 
-예외 처리 : 범위 안에 있고, 그리고 set / 2을 반환해.
 """
 
-def inRange(x, y):
-    return -5 <= x <= 5 and -5 <= y <= 5
-
 def solution(dirs):
-    cur_x, cur_y = 0, 0
-    answers = set()
+    answer = 0
+    candidate = set()
+    x, y = 0, 0
+    direction = {"U" : [0, 1], "D" : [0, -1], "L" : [-1, 0], "R" : [1, 0]}
     
-    moves = {'U': (0,1), 'D': (0,-1), 'R': (1,0), 'L': (-1,0)}
+    def inRange(x, y):
+        return -5<=x<=5 and -5<=y<=5
     
-    for d in dirs:
-        dx, dy = moves[d]
-        nx, ny = cur_x + dx, cur_y + dy
-        if inRange(nx, ny):
-            answers.add(((cur_x, cur_y), (nx, ny)))
-            answers.add(((nx, ny), (cur_x, cur_y)))
-            cur_x, cur_y = nx, ny
+    for k in dirs:
+        nx = x + direction[k][0]
+        ny = y + direction[k][1]
         
-    
-    return len(answers)//2
+        if (inRange(nx, ny)):
+            candidate.add((x, y, nx, ny))
+            candidate.add((nx, ny, x, y))
+        
+            x , y = nx, ny
+    return len(candidate) // 2
