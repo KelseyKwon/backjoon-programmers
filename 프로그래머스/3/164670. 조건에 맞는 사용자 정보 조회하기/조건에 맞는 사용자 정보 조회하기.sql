@@ -1,0 +1,19 @@
+-- 코드를 입력하세요
+-- join on a.WRITER_ID = b.USER_ID
+-- where count(distinct BOARD_ID) >= 3
+-- USER_ID, NICKNAME, concat_ws(' ', CITY, STREET_ADDRESS1, STTRE)
+-- CONCAT_WS('-', SUBSTR(TLNO, 0, 3), substr(TLNO, 3, 7), substr(TLNO, 7, 11)
+SELECT
+  u.USER_ID,
+  u.NICKNAME,
+  CONCAT_WS(' ', u.CITY, u.STREET_ADDRESS1, u.STREET_ADDRESS2) AS 전체주소,
+  CONCAT_WS('-', SUBSTR(u.TLNO, 1, 3), SUBSTR(u.TLNO, 4, 4), SUBSTR(u.TLNO, 8, 4)) AS 전화번호
+FROM USED_GOODS_USER AS u
+JOIN (
+  SELECT WRITER_ID
+  FROM USED_GOODS_BOARD
+  GROUP BY WRITER_ID
+  HAVING COUNT(*) >= 3
+) AS b
+  ON b.WRITER_ID = u.USER_ID
+ORDER BY u.USER_ID DESC;
