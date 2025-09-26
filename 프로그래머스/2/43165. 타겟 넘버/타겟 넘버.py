@@ -1,12 +1,14 @@
-"""
-
-"""
-
+from collections import deque
 def solution(numbers, target):
-    def dfs(cur, index):
-        if (index == len(numbers)):
-            return 1 if cur == target else 0
-        plus = dfs(cur + numbers[index], index+1)
-        minus = dfs(cur - numbers[index], index+1)
-        return plus + minus
-    return dfs(0, 0)
+    cnt = 0
+    deq = deque([(0,0)])
+    while deq:
+        s,l = deq.popleft()
+        if l>len(numbers):
+            break
+        if l==len(numbers) and target == s:
+            cnt +=1
+        deq.append((s+numbers[l-1],l+1))
+        deq.append((s-numbers[l-1],l+1))
+        
+    return cnt
