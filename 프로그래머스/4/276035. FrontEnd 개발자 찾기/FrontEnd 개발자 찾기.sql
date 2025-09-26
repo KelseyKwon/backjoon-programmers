@@ -1,8 +1,14 @@
 -- 코드를 작성해주세요
--- SKILCODES에서 CATEGORY = Front ENd인 Code들이 포함되어 있으면, 
--- 16 = BIN(16)이 SKILLCODE BIN(...)에 있으면
-select ID, EMAIL, FIRST_NAME, LAST_NAME
-from DEVELOPERS where SKILL_CODE & (
-    select sum(CODE) from SKILLCODES where CATEGORY = 'Front End'
-) > 0
-order by ID asc
+-- FrontEnd 스킬을 가진 개발자의 정보 조회
+-- b.ID, b.EMAIL, b.FIRST_NAME, b.LAST_NAME
+with front_end_code as (select sum(CODE)
+from SKILLCODES
+group by CATEGORY
+having CATEGORY = 'Front End')
+select d.ID, d.EMAIL, d.FIRST_NAME, d.LAST_NAME
+from DEVELOPERS as d
+where d.SKILL_CODE & (select sum(CODE)
+from SKILLCODES
+group by CATEGORY
+having CATEGORY = 'Front End') > 0
+order by d.ID asc
