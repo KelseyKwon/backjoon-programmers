@@ -1,38 +1,34 @@
-"""
-1은 생략 -> 나타난 횟수에 대해서 2a2b이런식으로
-
-for 끊는단위 (1 ~ s/2)
-stack으로!
-a
-"""
+# 단어 앞에서부터 -> 1부터 2/len(s) + 1까지
+# stack에 쌓아. 그리고 stack[-1]이랑 같을때까지 반복해
+# 
 import sys
 
 def solution(s):
-    n = len(s)
-    answer = n # 최악은 그대로의 길이 
+    answer = sys.maxsize
     
-    def dozip(start, length, s):
-        cur_str = []
-        prev = start
+    if (len(s)) == 1:
+        return 1
+    
+    
+    for i in range(1, len(s) // 2 + 1):
+        prev = s[:i]
         count = 1
-        for i in range(length, len(s), length):
-            temp = s[i:i+length]
-            if (prev == temp):
+        candidate = []
+        for step in range(i, len(s), i):
+            cur = s[step:step+i]
+            if cur == prev:
                 count += 1
             else:
-                # if (count == 1):
-                #     cur_str.append(prev)
-                # else:
-                #     cur_str.append(count + prev)
-                cur_str.append((str(count) if count > 1 else "") + prev)
+                if count > 1:
+                    candidate.append(str(count))
+                candidate.append(prev)
+                prev = cur
                 count = 1
-                prev = temp
-        cur_str.append((str(count) if count > 1 else "") + prev)
-        result_answer = len("".join(cur_str)) #문자로 이루어진 배열을 합치기
-        return result_answer
+        if count > 1:
+            candidate.append(str(count))
+        candidate.append(prev)
             
-    
-    for i in range(1, n // 2 + 1): 
-        answer = min(answer, dozip(s[:i], i, s))
-    
+        cur_answer = "".join(candidate)
+        answer = min(answer, len(cur_answer))
+        
     return answer
