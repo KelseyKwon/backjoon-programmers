@@ -1,15 +1,18 @@
 def solution(n, computers):
+    answer = 0
+    
     visited = [False] * n
-
-    def dfs(v):
-        visited[v] = True
-        for nxt, connected in enumerate(computers[v]):  # 인덱스와 값 같이
-            if connected == 1 and not visited[nxt]:
-                dfs(nxt)
-
-    cnt = 0
+    
+    def dfs(cur):
+        for k in range(n):
+            if computers[cur][k] and not visited[k]:
+                visited[k] = True
+                dfs(k)
+    
     for i in range(n):
         if not visited[i]:
+            visited[i] = True
             dfs(i)
-            cnt += 1
-    return cnt
+            answer += 1
+    
+    return answer
