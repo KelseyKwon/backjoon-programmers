@@ -1,28 +1,46 @@
 """
-말한거 또 말하기 x, 규칙 지켜야 함. 
-1. 말한거 또 말하기 x : not in set
-2. 규칙 지켜야함 : prev저장하고, prev[-1] = cur[0]이면 ok 
+1, 2, 3번 서로 돌아가며 -> modulo 연산!
+앞사람이 안말한거 / 이전에 안등장한거 / 한글자가 아닌거
 
-1, 2번 중 하나라도 안 지켜지면 return 
-순서 : index % n + 1
-번호 : index // n + 1 이렇게 반환.
+안말한거? -> set ! in set인지
+한글자가 아닌거? -> length
 
-아니면 -> [0, 0] 반환
+번호
+0 -> 1 i % n + 1
+1 -> 2
+2 -> 3
+3 -> 1
+
+8 -> 3 
+
+차례
+0 // 3 + 1
+3 // 3 + 1
+4 // 3 + 1
+5 // 3 + 1
 """
 
 def solution(n, words):
     answer = []
 
+    m = len(words)
     prev = words[0]
     said_word = set()
     said_word.add(prev)
     
-    for i in range(1, len(words)):
-        # 말한거 또 말하기 x
+    for i in range(1, m):
         cur = words[i]
-        if cur in said_word or prev[-1] != cur[0]:
-            return [i % n + 1, i // n + 1]
-        else:
-            said_word.add(cur)
-            prev = cur
+        person, turn = (i % n) + 1 , (i // n) + 1
+        
+        if cur in said_word:
+            print(person, turn)
+            return [person, turn]
+        
+        if prev[-1] != cur[0]:
+            return [person, turn]
+        
+        said_word.add(cur)
+        prev = cur
+        
+    
     return [0, 0]
