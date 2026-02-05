@@ -1,14 +1,27 @@
-from collections import defaultdict
+"""
+참여 선수, 완주 선수 -> participant, completion
 
+set을 이용해서??? 
+
+
+"""
+# from collections import Counter
+# def solution(participant, completion):
+#     answer = ''
+    
+#     partici_set = set(participant)
+#     comple_set = set(completion)
+    
+#     pre_answer = partici_set - comple_set
+#     if (not pre_answer):
+#         # 2명인 사람 반환
+#         cnt = Counter(participant)
+#         return [k for k, v in cnt.items() if v == 2]
+#     else:
+#         return pre_answer[0]
+#     return answer
+
+from collections import Counter
 def solution(participant, completion):
-  hash_map = defaultdict(int)
-
-  for i in participant:
-    hash_map[i] += 1
-  
-  for name in completion:
-    hash_map[name]-=1
-  
-  for name in hash_map:
-    if (hash_map[name] > 0):
-      return name
+    cnt = Counter(participant) - Counter(completion)
+    return next(iter(cnt));
