@@ -1,38 +1,43 @@
 """
-최단 거리 -> bfs!!
+상대팁 진영에 도착하기 위해서 지나야 하는 칸의 최솟값
 
-0이 갈 수 없는거, 1이 갈 수 있는거. 
-queue에 거리를 담아.
+도착 x -> -1 return!
 
+1이면 o, 
 
+상하좌우 살펴보고 -> 0이면 x, 
+
+0, 0 -> n, m으로 가야함. 
+
+bfs!
 """
 from collections import deque
 
 def solution(maps):
-    answer = 0
-    dx = [0, 1, 0, -1]
-    dy = [1, 0, -1, 0]
-    n = len(maps)
-    m = len(maps[0])
-    def inRange(x, y):
-        return 0<=x<n and 0<=y<m
+    answer = -1
+    N, M = len(maps), len(maps[0])
+    # visited = [[0 for _ in range(M)] for _ in range(N)]
+    visited = [[0] * M for _ in range(N)]
     
-    def bfs(x, y):
-        visited = [[False]*m for _ in range(n)] 
-        q = deque([(x, y, 1)])
-        visited[x][y] = True
-        while q:
-            cur_x, cur_y, cost = q.popleft()
-            
-            if (cur_x == n-1 and cur_y == m-1):
-                return cost
-            for i in range(4):
-                nx = cur_x + dx[i]
-                ny = cur_y + dy[i]
-                
-                if (inRange(nx, ny) and not visited[nx][ny] and maps[nx][ny] != 0):
-                    q.append((nx, ny, cost + 1))
-                    visited[nx][ny] = True  
-        return -1
+    def inRange(x, y):
+        return (x >= 0 and x < N and y >= 0 and y < M)
+    
+    dx = [1, 0, -1, 0]
+    dy = [0, 1, 0, -1]
+    
+    q = deque([(0, 0, 1)])
+    
+    while q:
+        cur_x, cur_y, dis = q.popleft();
+        if (cur_x == N - 1 and cur_y == M - 1):
+            return dis
         
-    return bfs(0, 0)
+        for i in range(4):
+            nx = cur_x + dx[i]
+            ny = cur_y + dy[i]
+            
+            if (inRange(nx, ny) and maps[nx][ny] and not visited[nx][ny]):
+                visited[nx][ny] = True
+                q.append((nx, ny, dis + 1))
+    
+    return answer
