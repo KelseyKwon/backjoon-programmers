@@ -1,6 +1,5 @@
 """
 baabaa -> bbaa -> aa -> x
-0
 
 
 """
@@ -8,15 +7,15 @@ baabaa -> bbaa -> aa -> x
 def solution(s):
     answer = -1
     
-    stack = []
-    
-    for a in s:
-        if stack and stack[-1] == a:
-            stack.pop()
-        else:
-            stack.append(a)
+    s_list = list(s)
 
-    if (stack):
-        return 0
-    else:
+    N = len(s)
+    prev = s[0]
+    for i in range(1, N):
+        if prev == s_list[i]:
+            s_list.pop(i-1)
+
+    if (len(s_list) == 0):
         return 1
+    else:
+        return 0
