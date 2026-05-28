@@ -1,21 +1,27 @@
 """
-유망함수 : 방문하지 않았고, 최소 필요 피로도보다 크거나 같다. 
+모든 경우의 수를 다 따져 봐야 함.
+
 """
 
 def solution(k, dungeons):
-    answer = -1
-    visited = [False] * len(dungeons)
+    visited = [False for _ in range(len(dungeons) + 1)]
     
-    def backtrack(cur_k, cnt, visited):
-        answer_max = cnt
-        for i in range(len(dungeons)):
-            if (cur_k >= dungeons[i][0] and not visited[i]):
+    def backtrack(cur_k, level):
+        max_level = level
+        if level == len(dungeons):
+            return max_level
+        
+        for i, d in enumerate(dungeons):
+            if not visited[i] and d[0] <= cur_k:
                 visited[i] = True
-                answer_max = max(
-                    answer_max, backtrack(cur_k - dungeons[i][1], cnt+1, visited)
-                )
+                
+                # 중요 ! 백트랙 -> 다음 단계로 넘어가고, 그 결과 중 가장 큰 값을 받아와서 갱신하기
+                result = backtrack(cur_k - d[1], level+1)
+                max_level = max(max_level, result)
+                
                 visited[i] = False
-        return answer_max
+        return max_level
     
-    max_answer = backtrack(k, 0, visited)
-    return max_answer
+    return backtrack(k, 0)
+    
+    
