@@ -1,16 +1,14 @@
 -- 코드를 입력하세요
--- MEMBER_ID로 묶고, REVIEW_ID 의 개수가 가장 많은 회원의 리뷰를 조사
+-- REVIEW_ID의 리뷰를 조회하는 것.
 -- a.MEMBER_NAME, b.REVIEW_TEXT, b.REVIEW_DATE
--- order by REVIEW_DATE asc, REVIEW_TEXT asc
-SELECT MEMBER_NAME
-     , REVIEW_TEXT
-     , DATE_FORMAT(REVIEW_DATE, '%Y-%m-%d') AS REVIEW_DATE
-FROM REST_REVIEW r
-INNER JOIN MEMBER_PROFILE m
-ON r.MEMBER_ID = m.MEMBER_ID
-WHERE r.MEMBER_ID = (SELECT MEMBER_ID
-                     FROM REST_REVIEW
-                     GROUP BY MEMBER_ID
-                     ORDER BY COUNT(REVIEW_ID) DESC
-                     LIMIT 1)
-ORDER BY REVIEW_DATE, REVIEW_TEXT
+-- MEMBER_ID로 하고, group by MEMBER_ID 
+
+with top_reviewer as (SELECT count(REVIEW_ID) as REVIEW_COUNT, MEMBER_ID
+from REST_REVIEW
+group by MEMBER_ID
+order by REVIEW_COUNT desc limit 1)
+
+select a.MEMBER_NAME, b.REVIEW_TEXT, b.REVIEW_DATE
+from MEMBER_PROFILE as a join REST_REVIEW as b on a.MEMBER_ID = b.MEMBER_ID
+where a.MEMBER_ID = (select MEMBER_ID FROM top_reviewer)
+order by b.REVIEW_DATE, b.REVIEW_TEXT
