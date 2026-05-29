@@ -1,29 +1,26 @@
-"""
-s의 반까지만 하기
-그리고 최소 길이를 갱신
-1부터 s의 반까지
-"""
-
 def solution(s):
-    if (len(s) == 1): return 1
-    answer = len(s)
-    for i in range(1, len(s) // 2 + 1):
-        prev = s[:i]
-        _ans = ""
+    lens = len(s)
+    answer = lens
+    for i in range(1, lens // 2 + 1):
         count = 1
-        
-        for j in range(i, len(s), i):
+        prev = s[:i]
+        cur_word = ""
+        for j in range(i, lens, i):
             cur = s[j:j+i]
             if prev == cur:
                 count += 1
+                continue
             else:
-                # if count != 1:
-                #     _ans += cur
-                # else:
-                #     _ans += str(count) + cur
-                _ans += (str(count) if count > 1 else "") + prev
+                _count = "" if count == 1 else str(count)
+                cur_word += _count + prev
                 prev = cur
                 count = 1
-        _ans += (str(count) if count > 1 else "") + prev
-        answer = min(answer, len(_ans))
+            
+    # 마지막 처리 
+        _count = "" if count == 1 else str(count)
+        cur_word += _count + prev
+        answer = min(answer, len(cur_word))
+        
     return answer
+        
+        
