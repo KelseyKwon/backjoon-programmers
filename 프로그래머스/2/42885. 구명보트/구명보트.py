@@ -1,20 +1,19 @@
 """
-50, 70, 80
-50, 50, 70, 80
+구명보트에는 최대 2명까지만
 
-일단 무거운 사람 태워 -> 만약에 첫번째 태울 수 있으면 -> okey!
-
+일단 무거운 사람은 무조건 한명 태울 수 있어 -> 근데, 가벼운 사람도 태울 수 있냐 없냐가 
 """
-from collections import deque
+
 def solution(people, limit):
+    answer = 0
     people.sort()
-    q = deque(people)
-    count = 0
     
-    while q:
-        right = q.pop()
-        if q and (right + q[0] <= limit):
-            q.popleft()
-        count += 1
-    return count
-        
+    left = 0
+    right = len(people) - 1
+    
+    while left <= right:
+        if (people[right] + people[left] <= limit):
+            left += 1
+        right -= 1
+        answer += 1
+    return answer
