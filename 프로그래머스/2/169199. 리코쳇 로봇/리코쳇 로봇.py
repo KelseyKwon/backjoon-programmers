@@ -1,43 +1,39 @@
 """
-R -> G
-D을 만나면 안됨.
-
-7번을 움직여야 함!
+상, 하, 좌, 우 중에 벽까지~ 아니면 D까지~
+최소! -> bfs! -> queue!
 """
 from collections import deque
 
 def solution(board):
-    rows, cols = len(board), len(board[0])
-    start_x, start_y, end_x, end_y = 0, 0, 0, 0
-    barriers = []
-    
-    for i in range(rows):
-        for j in range(cols):
-            if (board[i][j] == 'R'):
-                start_x, start_y = i, j
-                
-    visited = [[False for _ in range(cols)] for _ in range(rows)]
-    q = deque([(start_x, start_y, 0)])
-    visited[start_x][start_y] = True
-    
-    dx = [0, -1, 0, 1]
+    dx = [0, 1, 0, -1]
     dy = [1, 0, -1, 0]
     
+    n = len(board)
+    m = len(board[0])
+    for i in range(n):
+        for j in range(m):
+            if board[i][j] == 'R':
+                initial_x, initial_y = i, j
+    
+    q = deque([(initial_x, initial_y, 0)])
+    visited = [[False] * m for _ in range(n)]
+    
+    def inRange(x, y):
+        return 0<=x<n and 0<=y<m
+    
     while q:
-        x, y, count= q.popleft()
+        cur_x, cur_y, cnt = q.popleft()
         
-        if board[x][y] == 'G':
-            return count
+        if (board[cur_x][cur_y] == 'G'):
+            return cnt
         
         for i in range(4):
-            nx, ny = x, y
-            while 0<=nx+dx[i]<rows and 0<=ny+dy[i]<cols and board[nx+dx[i]][ny+dy[i]] != 'D':
+            nx, ny = cur_x, cur_y
+            while inRange(nx+dx[i], ny+dy[i]) and board[nx + dx[i]][ny + dy[i]] != 'D':
                 nx += dx[i]
                 ny += dy[i]
-            
             if not visited[nx][ny]:
                 visited[nx][ny] = True
-                q.append((nx, ny, count+1))
-                
+                q.append((nx, ny, cnt + 1))
+            
     return -1
-    
