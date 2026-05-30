@@ -1,36 +1,26 @@
 """
-최소 객실 -> 예약 현황을 바탕으로
 
-일단 두번쨰 인자를 기준으로 정렬해. 
-15:20 17:00 18:20 19:20 21:20
-
-일단 첫번쨰 인자를 기준으로 정렬해. 
-14:10 14:20 15:00 16:40 18:20
-
-[] 에 append -> (1, 19:20) 이런식으로
 """
 import heapq
+
 def solution(book_time):
+    convert = []
     
-    def str_to_int(time):
-        h, m = map(int, time.split(":"))
+    def converted(strs):
+        h, m = map(int, strs.split(":"))
         return h * 60 + m
-        
-    formatted_book = []
-    for start, end in book_time:
-        _start = str_to_int(start)
-        _end = str_to_int(end) + 10
-        formatted_book.append((_start, _end))
     
-    formatted_book.sort(key = lambda x:x[0])
-    
+    for b in book_time:
+        s, e = b
+        s_time = converted(s)
+        e_time = converted(e) + 10
+        convert.append((s_time, e_time))
+    convert.sort()
     room_info = []
-    for s, e in formatted_book:
-        if room_info and room_info[0] <= s:
+        
+    for i in range(len(convert)):
+        if room_info and room_info[0] <= convert[i][0]:
             heapq.heappop(room_info)
-        heapq.heappush(room_info, e)
+        heapq.heappush(room_info, convert[i][1])
         
     return len(room_info)
-        
-    
-    
