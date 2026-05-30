@@ -1,47 +1,59 @@
 """
-만약에 2번이 열리면
-1, 5, 2 
-2, 9, 2
+A, B, C를 최대한 k번 반복해서 열 수 있어.
+infection부터 시작해서, edges를 다 열거야.
 
-최대 -> 6번!
+x, y, type
 
-dfs?
+1 : (2, 1), (3, 1), (4, 3), (5, 2)
+2 : (1, 1), (8, 3), (9, 2)
+3 : 
+...
+10
 
-그래프 구성, 확산, 최적의 순서를 각각 다르게 적용해야 한다!
+그러면 초기에 감염된 것들을 넣고 -> 거기 stack과 연결된 것들, 파이프가 동일한것만
+추가?
 """
 from collections import deque
+from collections import defaultdict
+
 
 def solution(n, infection, edges, k):
-    graph = [[] for _ in range(n+1)]
-    for u, v, pipe_type in edges:
-        graph[u].append((v, pipe_type))
-        graph[v].append((u, pipe_type))
-        
-    # 확산
-    def spread(current_infected, target_pipe):
-        infected = set(current_infected)
-        queue = deque(current_infected)
-        
-        while queue:
-            cur_n = queue.popleft()
-            for neighbor, pipe_type in graph[cur_n]:
-                if pipe_type == target_pipe and neighbor not in infected:
-                    infected.add(neighbor)
-                    queue.append(neighbor)
-        return infected
+    info = defaultdict(list)
     
-    # 최적의 경로 찾기
-    # 왜 이렇게 하냐? -> 현재 내가 어떤 상황에 있는지를 다음 단계로 전달하는 수단이기 때문에.
-    # 초기 설정값을 설정한 이유 -> 최소한 지금 확보한 것은 보장받기 위해!
-    def dfs(current_infected, remaining_k):
-        if remaining_k == 0:
-            return len(current_infected)
-        max_infected = len(current_infected)
-        for pipe_type in [1, 2, 3]:
-            next_infected = spread(current_infected, pipe_type)
-            result = dfs(next_infected, remaining_k - 1)
-            max_infected = max(max_infected, result)
-        return max_infected
+    for e in edges:
+        x, y, n = e
+        info[x].append((y, n))
+        info[y].append((x, n))
         
-    initial_infected = {infection}
-    return dfs(initial_infected, k)
+    def spread(infect, types):
+        new_infect = set(infect)
+        q = deque(infect)
+        
+        while q:
+            cur_n = q.popleft()
+            for neighbor, pipe_type in info[cur_n]:
+                if pipe_type == types and neighbor not in new_infect:
+                    new_infect.add(neighbor)
+                    q.append(neighbor)
+        return new_infect
+    
+    def dfs(cur_infected, rem_k):
+        if rem_k == 0:
+            return len(cur_infected)
+        
+        max_infected = len(cur_infected)
+        
+        
+        for i in [1, 2, 3]:
+            next_infected = spread(cur_infected, i)
+            if len(next_infected) > len(cur_infected):
+                result = dfs(next_infected, rem_k - 1)
+                max_infected = max(max_infected, result)
+        
+        return max_infected
+    
+    infected = [infection]
+    return dfs(set(infected), k)
+    
+    
+    
