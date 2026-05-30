@@ -1,14 +1,19 @@
-from collections import deque
+"""
+모든 경우의 수를 찾아야 함 -> dfs
+"""
+
 def solution(numbers, target):
-    cnt = 0
-    deq = deque([(0,0)])
-    while deq:
-        s,l = deq.popleft()
-        if l>len(numbers):
-            break
-        if l==len(numbers) and target == s:
-            cnt +=1
-        deq.append((s+numbers[l-1],l+1))
-        deq.append((s-numbers[l-1],l+1))
+    answer = 0
+    def dfs(cur, idx):
+        nonlocal answer
+        if idx == len(numbers):
+            if cur == target:
+                answer += 1
+            return
         
-    return cnt
+        dfs(cur + numbers[idx], idx + 1)
+        dfs(cur - numbers[idx], idx + 1)
+    
+    dfs(0, 0)
+    return answer
+    
