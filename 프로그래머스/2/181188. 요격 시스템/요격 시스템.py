@@ -1,26 +1,18 @@
 """
-끝에가 더 작은것 나열
+만약에 폭격되지 않았어 -> 그러면 끝나기 직전에 쏘면 된다!
 
-1, 4 4, 5 3, 7 4, 8
-
-1부터 14까지
-각 칸마다 몇개가 겹쳐져 있는지
-
-4 직전에 쏘면 -> 하나만 
-4 직전에 쏘면 -> 3개 다 가능!
- 
+그리고, 그 숫자를 포함하고 있는 target들을 visited처리하면 됨.
 """
 
 def solution(targets):
-    answer = 0
-    targets.sort(key=lambda x: x[1])
-    cur_right = -1
-    for left, right in targets:
-        if left < cur_right:
-            continue
-        else:
-            answer += 1
-            cur_right = right
+    result = 0
     
-    return answer
+    targets.sort(key=lambda x: x[1])
+    prev_target = -1
+    
+    for i in range(len(targets)):
+        if prev_target <= targets[i][0]:
+            result += 1
+            prev_target = targets[i][1]
+    return result
             
