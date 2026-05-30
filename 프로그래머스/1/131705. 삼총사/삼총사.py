@@ -1,14 +1,17 @@
+"""
+삼총사를 만들기! 
+순서는 상관 없음.
+
+"""
+
 def solution(number):
-    answer = 0
+    result = 0
+    n = len(number)
     
-    def backtrack(start_idx, count, sums):
-        nonlocal answer
-        if count == 3:
-            if sums == 0:
-                answer += 1
-            return
-        
-        for i in range(start_idx, len(number)):
-            backtrack(i+1, count + 1, sums + number[i])
-    backtrack(0, 0, 0)
-    return answer
+    for i in range(n):
+        for j in range(i+1, n):
+            flag = number[i] + number[j]
+            cur = number[j+1:].count(-flag)
+            result += cur
+    
+    return result
