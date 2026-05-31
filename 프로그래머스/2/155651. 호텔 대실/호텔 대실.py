@@ -4,23 +4,21 @@
 import heapq
 
 def solution(book_time):
-    convert = []
+    converted = []
     
-    def converted(strs):
+    def toInt(strs):
         h, m = map(int, strs.split(":"))
         return h * 60 + m
     
-    for b in book_time:
-        s, e = b
-        s_time = converted(s)
-        e_time = converted(e) + 10
-        convert.append((s_time, e_time))
-    convert.sort()
-    room_info = []
+    for i, o in book_time:
+        converted.append((toInt(i), toInt(o) + 10))
+    
+    converted.sort(key = lambda x : x[0])
+    rooms = [] 
+    for i, o in converted:
+        if rooms and rooms[0] <= i:
+            heapq.heappop(rooms)
+        heapq.heappush(rooms, o)
+    
+    return len(rooms)
         
-    for i in range(len(convert)):
-        if room_info and room_info[0] <= convert[i][0]:
-            heapq.heappop(room_info)
-        heapq.heappush(room_info, convert[i][1])
-        
-    return len(room_info)
