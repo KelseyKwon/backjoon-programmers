@@ -2,17 +2,17 @@ from collections import Counter
 
 def solution(topping):
     answer = 0
-    
-    top = Counter(topping)
+    c = Counter(topping)
     new_top = set()
     
     for t in topping:
         new_top.add(t)
-        top[t] -= 1
+        c[t] -= 1
         
-        if top[t] == 0:
-            del top[t]
+        if c[t] == 0:
+            del c[t]
         
-        if len(top) == len(new_top):
+        if len(c) == len(new_top):
             answer += 1
+    
     return answer
