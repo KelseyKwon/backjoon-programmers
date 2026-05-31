@@ -1,18 +1,18 @@
 """
-차례대로 살펴보면 시간 초과 나.
-
--> stack? 백트래킹?
-stack으로 가자. (while)
+리스트 시간 초과나 
+-> 근데 개수 세는 건 아니야
 """
+
 def solution(numbers):
     stack = []
-    result = [-1] * len(numbers)
+    n = len(numbers)
+    result = [-1 for _ in range(n)]
+    
     for i in range(len(numbers)):
-        cur_num = numbers[i]
-        if stack:
-            while stack and numbers[stack[-1]] < cur_num:
-                result[stack[-1]] = cur_num
-                stack.pop()
-        stack.append(i) # [3, 3, 5]
+        while stack and numbers[stack[-1]] < numbers[i]:
+            num = stack.pop()
+            result[num] = numbers[i]
+        stack.append(i)
     
     return result
+    
