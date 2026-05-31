@@ -1,37 +1,38 @@
+"""
+from collection
+"""
 from collections import defaultdict
 import math
 
 def solution(fees, records):
-    answer = []
-    inInfo = defaultdict(int)
-    parkingTime = defaultdict(int)
+    info = defaultdict(int)
+    is_in = defaultdict(int)
     
     def toInt(strs):
         h, m = map(int, strs.split(":"))
         return h * 60 + m
     
     for r in records:
-        hour, carNum, isIn = r.split(" ")
-        if isIn == 'OUT':
-            parkingTime[carNum] += (toInt(hour) - inInfo[carNum])
-            inInfo.pop(carNum)
+        t, car_num, ins = r.split(" ")
+        time = toInt(t)
+        if ins == 'IN':
+            is_in[car_num] = time
         else:
-            inInfo[carNum] = toInt(hour)
-            
-    outTime = toInt("23:59")
-    for i in inInfo.keys():
-        parkingTime[i] += outTime - inInfo[i]
+            info[car_num] += time - is_in[car_num]
+            is_in.pop(car_num)
     
-    parked_time = dict(sorted(parkingTime.items()))
+    for key, value in is_in.items():
+        info[key] += toInt("23:59") - value
     
-    basicTime, basicFee, plusTime, plusFee = fees
+    infos = sorted(info.items(), key = lambda x:x[0])
     
-    for p in parked_time:
-        if parked_time[p] > basicTime:
-            finalFee = basicFee + (math.ceil((parked_time[p] - basicTime) / plusTime) * plusFee)
-            answer.append(finalFee)
+    result = []
+    basic_time, basic_fee, plus_time, plus_fee = fees
+    for car, time in infos:
+        if time > basic_time:
+            cur_fee = basic_fee + math.ceil((time - basic_time) / plus_time) * plus_fee
+            result.append(cur_fee)
         else:
-            answer.append(basicFee)
-    
-    return answer
+            result.append(basic_fee)
+    return result
             
